@@ -1,4 +1,4 @@
-app.controller( 'MessagesController', [ '$scope', '$rootScope', '$routeParams', 'messagesService', 'messages', function( $scope, $rootScope, $routeParams, messagesService, messages ) {
+app.controller( 'MessagesController', [ '$scope', '$rootScope', '$routeParams', 'messagesService', 'messages', '$interval', function( $scope, $rootScope, $routeParams, messagesService, messages, $interval ) {
     
     /*$scope.ripperForm = ripperDetails;
     $scope.ripperNameBackup = $scope.ripperForm.name;
@@ -15,9 +15,12 @@ app.controller( 'MessagesController', [ '$scope', '$rootScope', '$routeParams', 
         $scope.updateRipperForm.$setPristine();
     };*/
     
-    console.log( messages.length );
-    
     $scope.messages = messages;
+    
+    $scope.clearForm = function () {
+        $scope.messageForm.text = "";
+        $scope.createMessageForm.$setPristine();
+    };
     
     $scope.createMessage = function() {
         var response = messagesService.createMessage( $scope.messageForm );
@@ -25,6 +28,7 @@ app.controller( 'MessagesController', [ '$scope', '$rootScope', '$routeParams', 
         response.$promise.then(
             function( ripper ) {
                 $scope.messages = messagesService.query();
+                $scope.clearForm();
             },
             function( reason ) {
                 console.error( reason );
@@ -40,5 +44,8 @@ app.controller( 'MessagesController', [ '$scope', '$rootScope', '$routeParams', 
         // Set the form to untouched
         //$scope.updateRipperForm.$setPristine();
     };
+    
+    
+    $interval( function() { $scope.messages = messagesService.query(); }, 1000 );
     
 } ] );

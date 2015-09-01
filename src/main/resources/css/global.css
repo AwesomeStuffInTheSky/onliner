@@ -1,3 +1,12 @@
-.my-div {
-	color: green;
+.simple-message {
+    color: black;
 }
+
+.warning-message {
+    color: yellow;
+}
+
+.error-message {
+    color: red;
+}
+
